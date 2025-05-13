@@ -7,19 +7,21 @@ const LandingPage = () => {
             <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
                 <nav className="container mx-auto px-6 py-4">
                     <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-6">
                         <div className="flex items-center">
                             <ChefHat className="h-8 w-8 text-emerald-600" />
                             <span className="ml-2 text-2xl font-bold text-gray-800">Savr</span>
                         </div>
-                        <div className="hidden md:flex space-x-8">
-                            <a href="#features" className="text-gray-600 hover:text-emerald-600 transition-colors">Features</a>
-                            <a href="#how-it-works" className="text-gray-600 hover:text-emerald-600 transition-colors">How It Works</a>
-                            <a href="#sustainability" className="text-gray-600 hover:text-emerald-600 transition-colors">Sustainability</a>
-                            <a href="#testimonials" className="text-gray-600 hover:text-emerald-600 transition-colors">Testimonials</a>
+                          <div className="hidden md:flex space-x-8">
+                              <a href="#features" className="text-gray-600 hover:text-emerald-600 transition-colors">Features</a>
+                              <a href="#how-it-works" className="text-gray-600 hover:text-emerald-600 transition-colors">How It Works</a>
+                              <a href="#sustainability" className="text-gray-600 hover:text-emerald-600 transition-colors">Sustainability</a>
+                              <a href="#testimonials" className="text-gray-600 hover:text-emerald-600 transition-colors">Testimonials</a>
+                          </div>
                         </div>
-                        <button className="bg-emerald-600 text-white px-6 py-2 rounded-lg hover:bg-emerald-700 transition-colors shadow-md">
-                            Get Started
-                        </button>
+                          <button className="bg-emerald-600 text-white px-6 py-2 rounded-lg hover:bg-emerald-700 transition-colors shadow-md cursor-pointer">
+                              Get Started
+                          </button>
                     </div>
                 </nav>
             </header>
@@ -36,10 +38,10 @@ const LandingPage = () => {
                                 Savr plans your meals like a private chef would: listening to what you need, working with what you have, and personalizing for your goals and health.
                             </p>
                             <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                                <button className="bg-emerald-600 text-white px-8 py-3 rounded-lg hover:bg-emerald-700 transition-colors shadow-md">
+                                <button className="bg-emerald-600 text-white px-8 py-3 rounded-lg hover:bg-emerald-700 transition-colors shadow-md cursor-pointer">
                                     Start Cooking
                                 </button>
-                                <button className="border-2 border-emerald-600 text-emerald-600 px-8 py-3 rounded-lg hover:bg-emerald-50 transition-colors">
+                                <button className="border-2 border-emerald-600 text-emerald-600 px-8 py-3 rounded-lg hover:bg-emerald-50 transition-colors cursor-pointer">
                                     Learn More
                                 </button>
                             </div>
@@ -84,28 +86,34 @@ const LandingPage = () => {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                         <div className="bg-white p-8 rounded-xl shadow-md">
+                          <div className="flex flex items-center justify-center">
                             <div className="bg-emerald-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
-                                <ChefHat className="h-8 w-8 text-emerald-600" />
+                                <ChefHat className="h-8 w-8 text-emerald-600"/>
                             </div>
-                            <h3 className="text-xl font-semibold mb-3">AI-Powered Chef</h3>
+                            </div>
+                            <h3 className="text-xl font-semibold mb-3 flex items-center justify-center">AI-Powered Chef</h3>
                             <p className="text-gray-600">
                                 Tell Savr what you're craving or need, and it creates personalized meal plans that fit your preferences, dietary needs, and what's already in your kitchen.
                             </p>
                         </div>
                         <div className="bg-white p-8 rounded-xl shadow-md">
+                          <div className="flex items-center justify-center">
                             <div className="bg-emerald-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
                                 <Heart className="h-8 w-8 text-emerald-600" />
                             </div>
-                            <h3 className="text-xl font-semibold mb-3">Health Companion</h3>
+                            </div>
+                            <h3 className="text-xl font-semibold mb-3 flex items-center justify-center">Health Companion</h3>
                             <p className="text-gray-600">
                                 Whether you're dealing with hair loss, eye strain, fatigue, or brain fog, Savr creates personalized meal plans to support your specific needs.
                             </p>
                         </div>
                         <div className="bg-white p-8 rounded-xl shadow-md">
+                          <div className="flex items-center justify-center">
                             <div className="bg-emerald-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
                                 <Apple className="h-8 w-8 text-emerald-600" />
                             </div>
-                            <h3 className="text-xl font-semibold mb-3">Ingredient Intelligence</h3>
+                            </div>
+                            <h3 className="text-xl font-semibold mb-3 flex items-center justify-center">Ingredient Intelligence</h3>
                             <p className="text-gray-600">
                                 Learn how each ingredient fuels your body and supports your well-being, from how miso boosts gut health to why sesame seeds support hormone balance.
                             </p>
@@ -348,8 +356,8 @@ const LandingPage = () => {
                                 <div className="flex">
                                     <input
                                         type="email"
-                                        placeholder="Your email"
-                                        className="px-4 py-2 rounded-l-lg w-full focus:outline-none text-gray-800"
+                                        placeholder="Enter your email"
+                                        className="px-4 py-2 rounded-l-lg w-full text-white focus:ring-blue-500 focus:border-blue-500 border border-gray-300"
                                     />
                                     <button className="bg-emerald-600 text-white px-4 py-2 rounded-r-lg hover:bg-emerald-700 transition-colors">
                                         Subscribe
