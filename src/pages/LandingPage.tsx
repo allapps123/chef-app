@@ -465,11 +465,11 @@ const LandingPage: React.FC = () => {
                 <div className="text-sm mt-1">Helping you eat well and waste less</div>
               </div>
               <div className="flex space-x-6">
-                <a href="#" className="text-amber-800 hover:text-amber-600 transition-colors">
+                <a href="#" className="text-white hover:text-amber-600 transition-colors">
                   <span className="sr-only">Instagram</span>
                   <InstagramIcon/>
                 </a>
-                <a href="#" className="text-amber-800 hover:text-amber-600 transition-colors">
+                <a href="#" className="text-white hover:text-amber-600 transition-colors">
                   <span className="sr-only">Twitter</span>
                   <TwitterIcon/>
                 </a>
