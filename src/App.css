@@ -1,2 +1,123 @@
 @import "tailwindcss";
-  
+
+
+
+        /* Improved animations with more sophisticated timing functions */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.9s cubic-bezier(0.25, 0.1, 0.25, 1),
+              transform 0.9s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Direction-based animations */
+.animate-on-scroll.from-left {
+  transform: translateX(-50px);
+}
+
+.animate-on-scroll.from-right {
+  transform: translateX(50px);
+}
+
+.animate-on-scroll.from-left.animate-in,
+.animate-on-scroll.from-right.animate-in {
+  transform: translateX(0);
+}
+
+/* Scale animations */
+.animate-on-scroll.scale-up {
+  transform: scale(0.92);
+}
+
+.animate-on-scroll.scale-up.animate-in {
+  transform: scale(1);
+}
+
+/* Enhanced glass morphism */
+.glass-morph {
+  backdrop-filter: blur(12px);
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.glass-morph:hover {
+  backdrop-filter: blur(16px);
+  background: rgba(0, 0, 0, 0.7);
+  transform: translateY(-8px);
+  box-shadow: 0 25px 35px -5px rgba(0, 0, 0, 0.3),
+              0 15px 15px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Scroll indicator animation */
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 50px;
+  width: 30px;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  border-radius: 15px;
+}
+
+.scroll-indicator:after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  background-color: #fff;
+  border-radius: 100%;
+  animation: scrollIndicator 2s infinite;
+}
+
+@keyframes scrollIndicator {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+}
+
+/* Background parallax effect */
+.bg-parallax {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: background-position 0.3s ease-out;
+}
+
+/* Active navigation indicator */
+.nav-link.active {
+  color: #f59e0b;
+  position: relative;
+}
+
+.nav-link.active:after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 2px;
+  background-color: #f59e0b;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover:after {
+  width: 75%;
+}
