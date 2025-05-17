@@ -4,6 +4,7 @@ import InstagramIcon from '../components/icons/InstagramIcon';
 import TwitterIcon from '../components/icons/TwitterIcon';
 import ChatIcon from '../components/icons/ChatIcon';
 // import MenuIcon from '../components/icons/MenuIcon'
+import { Logo } from '../components/common/Logo'
 
 const LandingPage: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
@@ -188,7 +189,7 @@ const LandingPage: React.FC = () => {
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center">
             <div className={`text-stone-700 font-bold text-2xl transition-all duration-500 ${isScrolled ? 'transform scale-90' : ''}`}>
-              <span className="font-serif text-amber-800">Savr AI</span>
+              <Logo/>
             </div>
             <ul className="hidden md:flex space-x-8 text-lg font-medium">
               {['intro', 'features', 'about', 'contact'].map((section) => (
