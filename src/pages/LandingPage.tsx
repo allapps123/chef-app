@@ -304,8 +304,8 @@ const LandingPage: React.FC = () => {
 
             <div className="flex-1 rounded-2xl px-8 py-10 bg-stone-100 border border-stone-200 shadow-xl animate-on-scroll from-right">
               {[
-                { icon: Leaf, title: "Reduce Food Waste", desc: "With every plan, track your environmental impact by reducing food waste and supporting local ingredients." },
-                { icon: Clock, title: "Rescue Near-Expiry Items", desc: "Savr connects you to perfectly edible, near-expiry items, making it easy to rescue and use them at home." },
+                { icon: Leaf, title: "Reduce Food Waste", desc: "With every plan, track your environmental impact by reducing food waste, supporting local ingredients and fostering more sustainable eating habits." },
+                { icon: Clock, title: "Rescue Near-Expiry Items", desc: "Savr connects you to perfectly edible, near-expiry items, making it quick and easy to rescue them and turn them into delicious meals at home." },
                 { icon: Users, title: "Community Impact", desc: "Connect to food rescue hubs, community kitchens, and non-profits to tackle food insecurity and build a sustainable food system." }
               ].map((feature, index) => (
                 <div key={index} className="flex items-start mb-8 opacity-0 animate-on-scroll" style={{ animationDelay: `${(index + 3) * 200}ms` }}>
