@@ -6,7 +6,7 @@ interface LogoProps {
   className?: string;
 }
 
-export function Logo({ size = 'md', showText = true, color = 'text-amber-400', className = '' }: LogoProps) {
+export function Logo({ size = 'md', showText = true, color = 'text-amber-500', className = '' }: LogoProps) {
   // Size classes mapping
   const sizeClasses = {
     sm: 'h-3 w-5',
