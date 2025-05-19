@@ -6,7 +6,7 @@ interface LogoProps {
   className?: string;
 }
 
-export function Logo({ size = 'md', showText = true, color = 'text-amber-800', className = '' }: LogoProps) {
+export function Logo({ size = 'md', showText = true, color = 'text-amber-400', className = '' }: LogoProps) {
   // Size classes mapping
   const sizeClasses = {
     sm: 'h-3 w-5',
@@ -26,7 +26,7 @@ export function Logo({ size = 'md', showText = true, color = 'text-amber-800', c
         <img
           src="./logo.svg"
           alt="Savr AI Logo"
-          className={`${sizeClasses[size]} text-amber-800`}
+          className={`${sizeClasses[size]}`}
         />
       </div>
       {showText && (
