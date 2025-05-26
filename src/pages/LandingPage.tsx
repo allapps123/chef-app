@@ -8,6 +8,8 @@ import ChatFrame from '../components/common/ChatFrame';
 import GoogleLoginButton from '../components/common/Login';
 
 const LandingPage: React.FC = () => {
+    const [user, setUser] = useState<any>(null);
+
     const [isScrolled, setIsScrolled] = useState<boolean>(false);
 
     const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('down');
@@ -25,6 +27,20 @@ const LandingPage: React.FC = () => {
     const contactSectionRef = useRef<HTMLDivElement>(null);
 
     const [currentSection, setCurrentSection] = useState<string>('intro');
+
+    // Check if user is logged in
+    useEffect(() => {
+        const savedUser = localStorage.getItem('savr-user');
+        if (savedUser) {
+            setUser(JSON.parse(savedUser));
+        }
+    }, []);
+
+    // Logout handler
+    const handleLogout = () => {
+        localStorage.removeItem('savr-user');
+        setUser(null);
+    };
 
     useEffect(() => {
         let previousScrollPosition = window.scrollY;
@@ -218,10 +234,17 @@ const LandingPage: React.FC = () => {
                             </li>
                             ))}
                         </ul>
-                        {!localStorage.getItem("savr-user") && (
-                            <div className="hidden md:block">
-                                <GoogleLoginButton />
-                            </div>
+                        {user ? (
+                        <button
+                            onClick={handleLogout}
+                            className="hidden md:block text-sm text-stone-600 hover:text-red-500 transition"
+                        >
+                            Logout
+                        </button>
+                        ) : (
+                        <div className="hidden md:block">
+                            <GoogleLoginButton />
+                        </div>
                         )}
                         <div className="md:hidden">
                             <button className="text-amber-700 hover:text-amber-500">
