@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import GoogleLoginButton from '../components/common/Login';
 
 const placeholderMessages = [
   "What's a quick dinner I can make tonight?",
@@ -8,11 +10,28 @@ const placeholderMessages = [
 ];
 
 const ChatPage: React.FC = () => {
+  const [user, setUser] = useState<any>(null);
+  const navigate = useNavigate();
   const [displayText, setDisplayText] = useState('');
   const [messageIndex, setMessageIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [charIndex, setCharIndex] = useState(0);
   const [input, setInput] = useState('');
+
+  // Check if user is logged in
+  useEffect(() => {
+    const savedUser = localStorage.getItem('savr-user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+  }, []);
+
+  // Logout handler
+  const handleLogout = () => {
+    localStorage.removeItem('savr-user');
+    setUser(null);
+    navigate('/');
+  };
 
   // Typewriter effect for animated placeholder
   useEffect(() => {
@@ -47,9 +66,20 @@ const ChatPage: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-stone-100 text-stone-800">
       {/* Header */}
       <header className="bg-white shadow-sm px-6 py-4 flex justify-center">
-        <h1 className="text-xl font-serif text-amber-600">Savr AI Assistant</h1>
+        <div className="flex justify-between items-center w-full max-w-4xl mx-auto">
+          <h1 className="text-xl font-serif text-amber-600">Savr Chat Assistant</h1>
+          {user ? (
+            <button
+              onClick={handleLogout}
+              className="text-sm text-stone-500 hover:text-red-500 transition"
+            >
+              Logout
+            </button>
+          ) : (
+            <GoogleLoginButton />
+          )}
+        </div>
       </header>
-
       {/* Main chat */}
       <main className="flex-1 overflow-y-auto p-6">
         <div className="max-w-2xl mx-auto text-center">
