@@ -5,6 +5,7 @@ import ChatIcon from '../components/icons/ChatIcon';
 import { Logo } from '../components/common/Logo'
 import Footer from '../components/common/Footer';
 import ChatFrame from '../components/common/ChatFrame';
+import GoogleLoginButton from '../components/common/Login';
 
 const LandingPage: React.FC = () => {
     const [isScrolled, setIsScrolled] = useState<boolean>(false);
@@ -217,6 +218,11 @@ const LandingPage: React.FC = () => {
                             </li>
                             ))}
                         </ul>
+                        {!localStorage.getItem("savr-user") && (
+                            <div className="hidden md:block">
+                                <GoogleLoginButton />
+                            </div>
+                        )}
                         <div className="md:hidden">
                             <button className="text-amber-700 hover:text-amber-500">
                                 <MenuIcon />
