@@ -194,17 +194,27 @@ const LandingPage: React.FC = () => {
                             <Logo onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}/>
                         </div>
                         <ul className="hidden md:flex space-x-8 text-lg font-medium">
-                            {['intro', 'features', 'about', 'contact'].map((section) => (
-                                <li key={section}>
-                                    <a
-                                        href={`#${section}`}
-                                        onClick={(e) => { e.preventDefault(); scrollToSection(section); }}
-                                        className={`nav-link transition-all duration-300 py-2 px-3 rounded-md ${currentSection === section ? 'active text-amber-500' : 'text-amber-700 hover:text-amber-500'
-                                            }`}
-                                    >
-                                        {section.charAt(0).toUpperCase() + section.slice(1)}
-                                    </a>
-                                </li>
+                            {[
+                            { id: 'intro', label: 'Intro' },
+                            { id: 'features', label: 'Features' },
+                            { id: 'about', label: 'About' },
+                            { id: 'contact', label: 'Contact' },
+                            { id: 'chat', label: 'Chat', isRoute: true }
+                            ].map(({ id, label, isRoute }) => (
+                            <li key={id}>
+                                <a
+                                href={isRoute ? '/chat' : `#${id}`}
+                                onClick={(e) => {
+                                    if (!isRoute) {
+                                    e.preventDefault();
+                                    scrollToSection(id);
+                                    }
+                                }}
+                                className={`nav-link transition-all duration-300 py-2 px-3 rounded-md ${currentSection === id ? 'active text-amber-500' : 'text-amber-700 hover:text-amber-500'}`}
+                                >
+                                {label}
+                                </a>
+                            </li>
                             ))}
                         </ul>
                         <div className="md:hidden">
