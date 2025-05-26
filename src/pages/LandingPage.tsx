@@ -4,6 +4,7 @@ import ChatIcon from '../components/icons/ChatIcon';
 // import MenuIcon from '../components/icons/MenuIcon'
 import { Logo } from '../components/common/Logo'
 import Footer from '../components/common/Footer';
+import ChatFrame from '../components/common/ChatFrame';
 
 const LandingPage: React.FC = () => {
     const [isScrolled, setIsScrolled] = useState<boolean>(false);
@@ -12,6 +13,8 @@ const LandingPage: React.FC = () => {
     const [lastScrollY, setLastScrollY] = useState<number>(0);
 
     const [animationProgress, setAnimationProgress] = useState<number>(0);
+
+    const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
 
     const titleDivRef = useRef<HTMLDivElement>(null);
     const descriptionDivRef = useRef<HTMLDivElement>(null);
@@ -465,9 +468,12 @@ const LandingPage: React.FC = () => {
 
             {/* Chatbot LLM */}
             <div className="fixed bottom-6 right-6 z-50">
-                <button className="bg-amber-800 hover:bg-amber-700 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg transition-all duration-300 cursor-pointer">
+                <button
+                    onClick={() => setIsChatOpen((prev) => !prev)}
+                    className="bg-amber-800 hover:bg-amber-700 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg transition-all duration-300 cursor-pointer">
                     <ChatIcon />
                 </button>
+                {isChatOpen && <ChatFrame />}
             </div>
         </div>
     );
