@@ -67,16 +67,16 @@ const ChatPage: React.FC = () => {
       <footer className="w-full border-t bg-white px-4 py-4 shadow-inner">
         <div className="max-w-xl mx-auto">
           {/* Quick prompts */}
-          <div className="flex flex-wrap gap-2 mb-3 justify-center">
+          <div className="flex justify-center gap-3 mb-4">
             {[
-              "Dinner idea with lentils",
+              "Dinner idea with steak",
               "Low-calorie dessert",
               "Meal prep for 3 days",
               "Best source of iron"
             ].map((text, i) => (
               <button
                 key={i}
-                className="px-3 py-1 rounded-full border border-stone-300 text-sm hover:bg-stone-100 transition"
+                className="px-3 py-1 rounded-full border border-stone-300 text-sm hover:bg-stone-100 transition whitespace-nowrap"
               >
                 {text}
               </button>
