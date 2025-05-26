@@ -54,17 +54,34 @@ const ChatFrame: React.FC = () => {
       </div>
 
       {/* Typing input field */}
-      <div className="relative mt-3">
+      <div className="flex items-center bg-stone-50 border rounded-full px-3 py-2 shadow-sm relative mt-3">
+        {/* Upload icon */}
+        <button className="mr-2 text-stone-500 hover:text-amber-500 transition" title="Upload a file">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path d="M12 16v-4M12 12V8M16 12h-8M4 12a8 8 0 1116 0 8 8 0 01-16 0z" />
+          </svg>
+        </button>
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder=" "
-          className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 placeholder-transparent"
+          className="flex-grow bg-transparent text-sm px-2 py-1 focus:outline-none placeholder-transparent"
         />
-        <div className="absolute top-2.5 left-3 text-sm text-stone-400 pointer-events-none">
-          {input === '' && <span>{displayText}<span className="animate-pulse">|</span></span>}
-        </div>
+        {input === '' && (
+          <div className="absolute left-14 text-sm text-stone-400 pointer-events-none">
+            <span>{displayText}<span className="animate-pulse">|</span></span>
+          </div>
+        )}
+        {/* Voice icon */}
+        <button className="ml-2 text-stone-500 hover:text-amber-500 transition" title="Record voice">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path d="M12 1a4 4 0 0 1 4 4v7a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z" />
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+            <line x1="12" y1="19" x2="12" y2="23" />
+            <line x1="8" y1="23" x2="16" y2="23" />
+          </svg>
+        </button>
       </div>
     </div>
   );
