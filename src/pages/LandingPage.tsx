@@ -191,7 +191,7 @@ const LandingPage: React.FC = () => {
                 <div className="container mx-auto px-4">
                     <div className="flex justify-between items-center">
                         <div className={`text-stone-700 font-bold text-2xl transition-all duration-500 ${isScrolled ? 'transform scale-90' : ''}`}>
-                            <Logo />
+                            <Logo onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}/>
                         </div>
                         <ul className="hidden md:flex space-x-8 text-lg font-medium">
                             {['intro', 'features', 'about', 'contact'].map((section) => (
