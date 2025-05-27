@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GoogleLoginButton from '../components/common/Login';
+import { getAIResponse } from '../services/aiService';
+
+
+
+interface Message {
+  id: string;
+  content: string;
+  role: 'user' | 'assistant';
+  timestamp: Date;
+}
 
 const placeholderMessages = [
   "What's a quick dinner I can make tonight?",
@@ -8,6 +18,7 @@ const placeholderMessages = [
   "Meal prep with broccoli and rice?",
   "Give me a 3-day clean eating plan"
 ];
+
 
 const ChatPage: React.FC = () => {
   const [user, setUser] = useState<any>(null);
@@ -17,6 +28,10 @@ const ChatPage: React.FC = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [charIndex, setCharIndex] = useState(0);
   const [input, setInput] = useState('');
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [loading, setLoading] = useState(false);
+
+
 
   // Check if user is logged in
   useEffect(() => {
@@ -62,6 +77,38 @@ const ChatPage: React.FC = () => {
     return () => clearTimeout(timeout);
   }, [charIndex, isDeleting, messageIndex, input]);
 
+  const handleSend = async () => {
+    if (!input.trim()) return;
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      content: input,
+      role: 'user',
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
+    setLoading(true);
+
+    try {
+      const aiResponse = await getAIResponse(input);
+      const botMessage: Message = {
+        id: Date.now().toString() + '-bot',
+        content: aiResponse.text,
+        role: 'assistant',
+        timestamp: new Date()
+      };
+
+      setMessages(prev => [...prev, botMessage]);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   return (
     <div className="min-h-screen flex flex-col bg-stone-100 text-stone-800">
       {/* Header */}
@@ -80,17 +127,59 @@ const ChatPage: React.FC = () => {
           )}
         </div>
       </header>
+
       {/* Main chat */}
-      <main className="flex-1 overflow-y-auto p-6">
-        <div className="max-w-2xl mx-auto text-center">
-          <p className="text-lg font-medium mb-2">👋 Hi there! I'm your personal food assistant.</p>
-          <p className="text-stone-600">Ask me anything about what to eat, how to cook, or how to nourish your body.</p>
+      <main className="flex-1 overflow-y-auto">
+      {messages.length === 0 && (
+        <>
+          <div className="max-w-2xl mx-auto text-center p-6">
+            <p className="text-lg font-medium mb-2">👋 Hi there! I'm your personal food assistant.</p>
+            <p className="text-stone-600">Ask me anything about what to eat, how to cook, or how to nourish your body.</p>
+          </div>
+          <div className="max-w-2xl mx-auto mt-10 text-center text-stone-400 italic">
+            Let's cook up some ideas together 🍳
+          </div>
+        </>
+        )}
+
+        <div className="max-w-2xl mx-auto mt-8 space-y-4">
+          {messages.map((msg) => (
+            <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
+                msg.role === 'user'
+                  ? 'bg-amber-500 text-white rounded-br-md'
+                  : 'bg-white text-gray-800 rounded-bl-md shadow-sm'
+              }`}>
+                <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                <p className={`text-xs mt-1 ${
+                  msg.role === 'user' ? 'text-blue-100' : 'text-gray-400'
+                }`}>
+                  {msg.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                </p>
+              </div>
+            </div>
+          ))}
+
+
+
+          {loading && (
+            <div className="flex justify-start">
+              <div className="bg-white text-gray-800 rounded-2xl rounded-bl-md shadow-sm px-4 py-2 max-w-xs">
+                <div className="flex items-center space-x-1">
+                  <div className="flex space-x-1">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                  </div>
+                  <span className="text-xs text-gray-400 ml-2">Typing...</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Chat history */}
-        <div className="max-w-2xl mx-auto mt-10 text-center text-stone-400 italic">
-          Let’s cook up some ideas together 🍳
-        </div>
+
+
       </main>
 
       {/* Chat input footer */}
@@ -127,6 +216,7 @@ const ChatPage: React.FC = () => {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {if(e.key === 'Enter') handleSend(); }}
               placeholder=" "
               className="flex-grow bg-transparent text-sm px-2 py-1 focus:outline-none placeholder-transparent"
             />
@@ -147,7 +237,7 @@ const ChatPage: React.FC = () => {
             </button>
 
             {/* Send button */}
-            <button className="ml-3 text-stone-600 hover:text-black" title="Send">
+            <button onClick={handleSend} className="ml-3 text-stone-600 hover:text-black" title="Send">
               <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path d="M12 19l9-7-9-7v14z" />
               </svg>
