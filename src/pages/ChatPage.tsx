@@ -1,4 +1,4 @@
-  import React, { useEffect, useState } from 'react';
+  import React, { useEffect, useState, useRef } from 'react';
   import { useNavigate } from 'react-router-dom';
   import GoogleLoginButton from '../components/common/Login';
   import { getAIResponse } from '../services/aiService';
@@ -30,8 +30,16 @@
     const [input, setInput] = useState('');
     const [messages, setMessages] = useState<Message[]>([]);
     const [loading, setLoading] = useState(false);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
 
+    // automatically scroll down
+    const scrollToBottom = () => {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
 
+    useEffect(() => {
+      scrollToBottom();
+    }, [messages, loading])
 
     // Check if user is logged in
     useEffect(() => {
@@ -218,6 +226,7 @@
                 </div>
               </div>
             )}
+            <div ref={messagesEndRef} />
           </div>
 
 
