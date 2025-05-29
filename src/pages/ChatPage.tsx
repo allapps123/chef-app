@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GoogleLoginButton from '../components/common/Login';
+import BotIcon from '../components/icons/BotIcon';
 import { signOut, auth} from '../lib/firebase';
 
 const placeholderMessages = [
@@ -84,9 +85,16 @@ const ChatPage: React.FC = () => {
       </header>
       {/* Main chat */}
       <main className="flex-1 overflow-y-auto p-6">
-        <div className="max-w-2xl mx-auto text-center">
-          <p className="text-lg font-medium mb-2">👋 Hi there! I'm your personal food assistant.</p>
-          <p className="text-stone-600">Ask me anything about what to eat, how to cook, or how to nourish your body.</p>
+        <div className="max-w-2xl mx-auto">
+          <div className="flex items-start space-x-2 mb-4">
+            <BotIcon className="w-8 h-8 text-amber-500" />
+            <div className="bg-blue-100 text-stone-800 p-4 rounded-xl max-w-xs">
+              👋 Hi there! I'm your personal food assistant.
+            </div>
+          </div>
+          <p className="text-stone-600">
+            Ask me anything about what to eat, how to cook, or how to nourish your body.
+          </p>
         </div>
 
         {/* Chat history */}
