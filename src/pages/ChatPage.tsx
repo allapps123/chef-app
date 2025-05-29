@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GoogleLoginButton from '../components/common/Login';
+import { signOut, auth} from '../lib/firebase';
 
 const placeholderMessages = [
   "What's a quick dinner I can make tonight?",
@@ -27,7 +28,8 @@ const ChatPage: React.FC = () => {
   }, []);
 
   // Logout handler
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await signOut(auth);
     localStorage.removeItem('savr-user');
     setUser(null);
     navigate('/');

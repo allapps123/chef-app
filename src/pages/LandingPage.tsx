@@ -6,8 +6,11 @@ import { Logo } from '../components/common/Logo'
 import Footer from '../components/common/Footer';
 import ChatFrame from '../components/common/ChatFrame';
 import GoogleLoginButton from '../components/common/Login';
+import { signOut, auth } from '../lib/firebase';
+import { useNavigate } from 'react-router-dom';
 
 const LandingPage: React.FC = () => {
+    const navigate = useNavigate();
     const [user, setUser] = useState<any>(null);
 
     const [isScrolled, setIsScrolled] = useState<boolean>(false);
@@ -37,9 +40,11 @@ const LandingPage: React.FC = () => {
     }, []);
 
     // Logout handler
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        await signOut(auth);
         localStorage.removeItem('savr-user');
         setUser(null);
+        navigate('/');
     };
 
     useEffect(() => {
