@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import BotIcon from '../icons/BotIcon';
 
 const placeholderMessages = [
   "Ask for a recipe...",
@@ -50,7 +51,14 @@ const ChatFrame: React.FC = () => {
 
       {/* Bot message area */}
       <div className="h-40 overflow-y-auto bg-stone-50 rounded-md p-3 text-stone-700 text-sm">
-        <p><strong>Bot:</strong> Hi! How can I help you plan your next meal?</p>
+        <div className="flex flex-col space-y-2">
+          <div className="flex items-start space-x-2">
+            <BotIcon className="w-8 h-8 text-amber-500" />
+            <div className="bg-blue-100 text-stone-800 p-4 rounded-xl max-w-xs">
+              Hi! How can I help you plan your next meal?
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Typing input field */}
@@ -69,7 +77,7 @@ const ChatFrame: React.FC = () => {
           className="flex-grow bg-transparent text-sm px-2 py-1 focus:outline-none placeholder-transparent"
         />
         {input === '' && (
-          <div className="absolute left-14 text-sm text-stone-400 pointer-events-none">
+          <div className="absolute left-10 text-sm text-stone-400 pointer-events-none">
             <span>{displayText}<span className="animate-pulse">|</span></span>
           </div>
         )}
