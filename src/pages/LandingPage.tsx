@@ -242,7 +242,7 @@ const LandingPage: React.FC = () => {
                         {user ? (
                         <button
                             onClick={handleLogout}
-                            className="hidden md:block text-sm text-stone-600 hover:text-red-500 transition"
+                            className="hidden md:block bg-amber-600 hover:bg-amber-500 text-white font-medium px-5 py-2 rounded-full shadow transition-all text-sm"
                         >
                             Logout
                         </button>

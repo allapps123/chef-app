@@ -74,7 +74,7 @@ const ChatPage: React.FC = () => {
           {user ? (
             <button
               onClick={handleLogout}
-              className="text-sm text-stone-500 hover:text-red-500 transition"
+              className="bg-amber-600 hover:bg-amber-500 text-white font-medium px-5 py-2 rounded-full shadow transition-all text-sm"
             >
               Logout
             </button>
@@ -88,7 +88,7 @@ const ChatPage: React.FC = () => {
         <div className="max-w-2xl mx-auto">
           <div className="flex items-start space-x-2 mb-4">
             <BotIcon className="w-8 h-8 text-amber-500" />
-            <div className="bg-blue-100 text-stone-800 p-4 rounded-xl max-w-xs">
+            <div className="bg-blue-100 text-stone-800 p-4 rounded-xl max-w-xs text-left">
               👋 Hi there! I'm your personal food assistant.
             </div>
           </div>
