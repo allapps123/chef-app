@@ -13,6 +13,7 @@ const ChatFrame: React.FC = () => {
   const [displayText, setDisplayText] = useState('');
   const [messageIndex, setMessageIndex] = useState(0);
   const [input, setInput] = useState('');
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [charIndex, setCharIndex] = useState(0);
 
@@ -73,10 +74,12 @@ const ChatFrame: React.FC = () => {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onFocus={() => setIsInputFocused(true)}
+          onBlur={() => setIsInputFocused(false)}
           placeholder=" "
           className="flex-grow bg-transparent text-sm px-2 py-1 focus:outline-none placeholder-transparent"
         />
-        {input === '' && (
+        {input === '' && !isInputFocused && (
           <div className="absolute left-10 text-sm text-stone-400 pointer-events-none">
             <span>{displayText}<span className="animate-pulse">|</span></span>
           </div>

@@ -19,6 +19,7 @@ const ChatPage: React.FC = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [charIndex, setCharIndex] = useState(0);
   const [input, setInput] = useState('');
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   // Check if user is logged in
   useEffect(() => {
@@ -86,9 +87,9 @@ const ChatPage: React.FC = () => {
       {/* Main chat */}
       <main className="flex-1 overflow-y-auto p-6">
         <div className="max-w-2xl mx-auto">
-          <div className="flex items-start space-x-2 mb-4">
+          <div className="flex items-start space-x-3 mb-4">
             <BotIcon className="w-8 h-8 text-amber-500" />
-            <div className="bg-blue-100 text-stone-800 p-4 rounded-xl max-w-xs text-left">
+            <div className="bg-blue-100 text-stone-800 px-4 py-2 rounded-xl max-w-md text-left">
               👋 Hi there! I'm your personal food assistant.
             </div>
           </div>
@@ -137,10 +138,12 @@ const ChatPage: React.FC = () => {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              onFocus={() => setIsInputFocused(true)}
+              onBlur={() => setIsInputFocused(false)}
               placeholder=" "
               className="flex-grow bg-transparent text-sm px-2 py-1 focus:outline-none placeholder-transparent"
             />
-            {input === '' && (
+            {input === '' && !isInputFocused && (
               <div className="absolute left-12 text-stone-400 text-sm pointer-events-none">
                 {displayText}<span className="animate-pulse">|</span>
               </div>
