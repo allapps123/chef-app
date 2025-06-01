@@ -89,7 +89,7 @@ const ChatPage: React.FC = () => {
         <div className="max-w-2xl mx-auto">
           <div className="flex items-start space-x-3 mb-4">
             <BotIcon className="w-8 h-8 text-amber-500" />
-            <div className="bg-blue-100 text-stone-800 px-4 py-2 rounded-xl max-w-md text-left">
+            <div className="bg-yellow-100 text-stone-800 px-4 py-2 rounded-xl max-w-md text-left">
               👋 Hi there! I'm your personal food assistant.
             </div>
           </div>

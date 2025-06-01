@@ -48,14 +48,14 @@ const ChatFrame: React.FC = () => {
   return (
     <div className="fixed bottom-24 right-6 w-80 bg-white rounded-2xl shadow-2xl p-4 z-50 border border-stone-300">
       {/* Header */}
-      <div className="text-sm text-stone-600 mb-3">Savr AI Assistant</div>
+      <div className="text-sm text-yellow-800 mb-3">Savr AI Assistant</div>
 
       {/* Bot message area */}
       <div className="h-40 overflow-y-auto bg-stone-50 rounded-md p-3 text-stone-700 text-sm">
         <div className="flex flex-col space-y-2">
           <div className="flex items-start space-x-2">
             <BotIcon className="w-8 h-8 text-amber-500" />
-            <div className="bg-blue-100 text-stone-800 p-4 rounded-xl max-w-xs">
+            <div className="bg-yellow-100 text-stone-800 p-4 rounded-xl max-w-xs">
               Hi! How can I help you plan your next meal?
             </div>
           </div>
@@ -63,7 +63,7 @@ const ChatFrame: React.FC = () => {
       </div>
 
       {/* Typing input field */}
-      <div className="flex items-center bg-stone-50 border rounded-full px-3 py-2 shadow-sm relative mt-3">
+      <div className="flex items-center bg-white border border-stone-300 rounded-full px-3 py-2 shadow-sm relative mt-3">
         {/* Upload icon */}
         <button className="mr-2 text-stone-500 hover:text-amber-500 transition" title="Upload a file">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -85,7 +85,7 @@ const ChatFrame: React.FC = () => {
           </div>
         )}
         {/* Voice icon */}
-        <button className="ml-2 text-stone-500 hover:text-amber-500 transition" title="Record voice">
+        <button className="ml-2 text-stone-500 hover:text-yellow-700 transition" title="Record voice">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path d="M12 1a4 4 0 0 1 4 4v7a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z" />
             <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
