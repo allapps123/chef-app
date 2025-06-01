@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GoogleLoginButton from '../components/common/Login';
-import BotIcon from '../components/icons/BotIcon';
-import { signOut, auth} from '../lib/firebase';
 
-const placeholderMessages = [
-  "What's a quick dinner I can make tonight?",
-  "Suggest a healthy lunch idea",
-  "Meal prep with broccoli and rice?",
-  "Give me a 3-day clean eating plan"
-];
+  const placeholderMessages = [
+    "What's a quick dinner I can make tonight?",
+    "Suggest a healthy lunch idea",
+    "Meal prep with broccoli and rice?",
+    "Give me a 3-day clean eating plan"
+  ];
+
 
 const ChatPage: React.FC = () => {
   const [user, setUser] = useState<any>(null);
@@ -19,52 +18,116 @@ const ChatPage: React.FC = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [charIndex, setCharIndex] = useState(0);
   const [input, setInput] = useState('');
-  const [isInputFocused, setIsInputFocused] = useState(false);
 
-  // Check if user is logged in
-  useEffect(() => {
-    const savedUser = localStorage.getItem('savr-user');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-  }, []);
+    // Check if user is logged in
+    useEffect(() => {
+      const savedUser = localStorage.getItem('savr-user');
+      if (savedUser) {
+        setUser(JSON.parse(savedUser));
+      }
+    }, []);
 
   // Logout handler
-  const handleLogout = async () => {
-    await signOut(auth);
+  const handleLogout = () => {
     localStorage.removeItem('savr-user');
     setUser(null);
     navigate('/');
   };
 
-  // Typewriter effect for animated placeholder
-  useEffect(() => {
-    if (input !== '') return;
+    // Typewriter effect for animated placeholder
+    useEffect(() => {
+      if (input !== '') return;
 
-    const current = placeholderMessages[messageIndex];
-    let timeout: NodeJS.Timeout;
+      const current = placeholderMessages[messageIndex];
+      let timeout: NodeJS.Timeout;
 
-    if (isDeleting) {
-      timeout = setTimeout(() => {
-        setDisplayText(prev => prev.slice(0, -1));
-        setCharIndex(i => i - 1);
-        if (charIndex <= 0) {
-          setIsDeleting(false);
-          setMessageIndex(i => (i + 1) % placeholderMessages.length);
+      if (isDeleting) {
+        timeout = setTimeout(() => {
+          setDisplayText(prev => prev.slice(0, -1));
+          setCharIndex(i => i - 1);
+          if (charIndex <= 0) {
+            setIsDeleting(false);
+            setMessageIndex(i => (i + 1) % placeholderMessages.length);
+          }
+        }, 40);
+      } else {
+        timeout = setTimeout(() => {
+          setDisplayText(prev => prev + current.charAt(charIndex));
+          setCharIndex(i => i + 1);
+          if (charIndex >= current.length) {
+            setTimeout(() => setIsDeleting(true), 1600);
+          }
+        }, 80);
+      }
+
+      return () => clearTimeout(timeout);
+    }, [charIndex, isDeleting, messageIndex, input]);
+
+
+    useEffect(() => {
+      const savedMessages = localStorage.getItem('savr-conversation');
+      if (savedMessages) {
+        try {
+          const parsedMessages = JSON.parse(savedMessages);
+          // Convert string dates back to Date objects
+          const messagesWithDates = parsedMessages.map((msg: any) => ({
+            ...msg,
+            timestamp: new Date(msg.timestamp)
+          }));
+          setMessages(messagesWithDates);
+        } catch (err) {
+          console.error('Error loading saved messages:', err);
         }
-      }, 40);
-    } else {
-      timeout = setTimeout(() => {
-        setDisplayText(prev => prev + current.charAt(charIndex));
-        setCharIndex(i => i + 1);
-        if (charIndex >= current.length) {
-          setTimeout(() => setIsDeleting(true), 1600);
-        }
-      }, 80);
+      }
+    }, []);
+
+    // Save messages whenever they change
+    useEffect(() => {
+      if (messages.length > 0) {
+        localStorage.setItem('savr-conversation', JSON.stringify(messages));
+      }
+    }, [messages]);
+
+    const handleSend = async () => {
+      if (!input.trim()) return;
+
+      const userMessage: Message = {
+        id: Date.now().toString(),
+        content: input,
+        role: 'user',
+        timestamp: new Date()
+      };
+
+      setMessages(prev => [...prev, userMessage]);
+      setInput('');
+      setLoading(true);
+
+      try {
+        const aiResponse = await getAIResponse(input, messages);
+        const botMessage: Message = {
+          id: Date.now().toString() + '-bot',
+          content: aiResponse.text,
+          role: 'assistant',
+          timestamp: new Date()
+        };
+
+        setMessages(prev => [...prev, botMessage]);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const formatTimeHHMM = (date : Date): string => {
+      return date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
     }
 
-    return () => clearTimeout(timeout);
-  }, [charIndex, isDeleting, messageIndex, input]);
+    const clearConversation = () => {
+      setMessages([]);
+      localStorage.removeItem('savr-conversation');
+    };
+
 
   return (
     <div className="min-h-screen flex flex-col bg-stone-100 text-stone-800">
@@ -75,7 +138,7 @@ const ChatPage: React.FC = () => {
           {user ? (
             <button
               onClick={handleLogout}
-              className="bg-amber-600 hover:bg-amber-500 text-white font-medium px-5 py-2 rounded-full shadow transition-all text-sm"
+              className="text-sm text-stone-500 hover:text-red-500 transition"
             >
               Logout
             </button>
@@ -86,16 +149,9 @@ const ChatPage: React.FC = () => {
       </header>
       {/* Main chat */}
       <main className="flex-1 overflow-y-auto p-6">
-        <div className="max-w-2xl mx-auto">
-          <div className="flex items-start space-x-3 mb-4">
-            <BotIcon className="w-8 h-8 text-amber-500" />
-            <div className="bg-yellow-100 text-stone-800 px-4 py-2 rounded-xl max-w-md text-left">
-              👋 Hi there! I'm your personal food assistant.
-            </div>
-          </div>
-          <p className="text-stone-600">
-            Ask me anything about what to eat, how to cook, or how to nourish your body.
-          </p>
+        <div className="max-w-2xl mx-auto text-center">
+          <p className="text-lg font-medium mb-2">👋 Hi there! I'm your personal food assistant.</p>
+          <p className="text-stone-600">Ask me anything about what to eat, how to cook, or how to nourish your body.</p>
         </div>
 
         {/* Chat history */}
@@ -104,72 +160,71 @@ const ChatPage: React.FC = () => {
         </div>
       </main>
 
-      {/* Chat input footer */}
-      <footer className="w-full border-t bg-white px-4 py-4 shadow-inner">
-        <div className="max-w-xl mx-auto">
-          {/* Quick prompts */}
-          <div className="flex justify-center gap-3 mb-4">
-            {[
-              "Dinner idea with steak",
-              "Low-calorie dessert",
-              "Meal prep for 3 days",
-              "Best source of iron"
-            ].map((text, i) => (
-              <button
-                key={i}
-                className="px-3 py-1 rounded-full border border-stone-300 text-sm hover:bg-stone-100 transition whitespace-nowrap"
-              >
-                {text}
-              </button>
-            ))}
-          </div>
+        {/* Chat input footer */}
+        <footer className="w-full border-t bg-white px-4 py-4 shadow-inner">
+          <div className="max-w-xl mx-auto">
+            {/* Quick prompts */}
+            <div className="flex justify-center gap-3 mb-4">
+              {[
+                "Dinner idea with steak",
+                "Low-calorie dessert",
+                "Meal prep for 3 days",
+                "Best source of iron"
+              ].map((text, i) => (
+                <button
+                  key={i}
+                  onClick={() => setInput(text)}
+                  className="px-3 py-1 rounded-full border border-stone-300 text-sm hover:bg-stone-100 transition whitespace-nowrap"
+                >
+                  {text}
+                </button>
+              ))}
+            </div>
 
-          {/* Input box */}
-          <div className="flex items-center bg-stone-50 border rounded-full px-4 py-2 shadow-sm relative">
-            {/* Upload icon */}
-            <button className="mr-2 text-stone-500 hover:text-amber-500 transition" title="Upload a file">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path d="M12 16v-4M12 12V8M16 12h-8M4 12a8 8 0 1116 0 8 8 0 01-16 0z" />
-              </svg>
-            </button>
+            {/* Input box */}
+            <div className="flex items-center bg-stone-50 border rounded-full px-4 py-2 shadow-sm relative">
+              {/* Upload icon */}
+              <button className="mr-2 text-stone-500 hover:text-amber-500 transition" title="Upload a file">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="M12 16v-4M12 12V8M16 12h-8M4 12a8 8 0 1116 0 8 8 0 01-16 0z" />
+                </svg>
+              </button>
 
             {/* Input field */}
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onFocus={() => setIsInputFocused(true)}
-              onBlur={() => setIsInputFocused(false)}
               placeholder=" "
               className="flex-grow bg-transparent text-sm px-2 py-1 focus:outline-none placeholder-transparent"
             />
-            {input === '' && !isInputFocused && (
+            {input === '' && (
               <div className="absolute left-12 text-stone-400 text-sm pointer-events-none">
                 {displayText}<span className="animate-pulse">|</span>
               </div>
             )}
 
-            {/* Voice icon */}
-            <button className="ml-2 text-stone-500 hover:text-amber-500 transition" title="Record voice">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path d="M12 1a4 4 0 0 1 4 4v7a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z" />
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                <line x1="12" y1="19" x2="12" y2="23" />
-                <line x1="8" y1="23" x2="16" y2="23" />
-              </svg>
-            </button>
+              {/* Voice icon */}
+              <button className="ml-2 text-stone-500 hover:text-amber-500 transition" title="Record voice">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="M12 1a4 4 0 0 1 4 4v7a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z" />
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                  <line x1="12" y1="19" x2="12" y2="23" />
+                  <line x1="8" y1="23" x2="16" y2="23" />
+                </svg>
+              </button>
 
-            {/* Send button */}
-            <button className="ml-3 text-stone-600 hover:text-black" title="Send">
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path d="M12 19l9-7-9-7v14z" />
-              </svg>
-            </button>
+              {/* Send button */}
+              <button onClick={handleSend} className="ml-3 text-stone-600 hover:text-black cursor-pointer" title="Send">
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="M12 19l9-7-9-7v14z" />
+                </svg>
+              </button>
+            </div>
           </div>
-        </div>
-      </footer>
-    </div>
-  );
-};
+        </footer>
+      </div>
+    );
+  };
 
-export default ChatPage;
+  export default ChatPage;
