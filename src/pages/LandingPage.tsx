@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { ChefHat, Clock, Leaf, Apple, Heart, Users, MenuIcon } from 'lucide-react';
 import ChatIcon from '../components/icons/ChatIcon';
+import BotIcon from '../components/icons/BotIcon';
 // import MenuIcon from '../components/icons/MenuIcon'
 import { Logo } from '../components/common/Logo'
 import Footer from '../components/common/Footer';
@@ -8,6 +9,20 @@ import ChatFrame from '../components/common/ChatFrame';
 import GoogleLoginButton from '../components/common/Login';
 import { signOut, auth } from '../lib/firebase';
 import { useNavigate } from 'react-router-dom';
+
+interface Message {
+  id: string;
+  content: string;
+  role: 'user' | 'assistant';
+  timestamp: Date;
+}
+
+const placeholderMessages = [
+  "What's a quick dinner I can make tonight?",
+  "Suggest a healthy lunch idea",
+  "Meal prep with broccoli and rice?",
+  "Give me a 3-day clean eating plan"
+];
 
 const LandingPage: React.FC = () => {
     const navigate = useNavigate();
@@ -21,6 +36,13 @@ const LandingPage: React.FC = () => {
     const [animationProgress, setAnimationProgress] = useState<number>(0);
 
     const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+
+    // Chat functionality - simplified for just input bar
+    const [displayText, setDisplayText] = useState('');
+    const [messageIndex, setMessageIndex] = useState(0);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [charIndex, setCharIndex] = useState(0);
+    const [input, setInput] = useState('');
 
     const titleDivRef = useRef<HTMLDivElement>(null);
     const descriptionDivRef = useRef<HTMLDivElement>(null);
@@ -45,6 +67,44 @@ const LandingPage: React.FC = () => {
         localStorage.removeItem('savr-user');
         setUser(null);
         navigate('/');
+    };
+
+    // Typewriter effect for animated placeholder
+    useEffect(() => {
+        if (input !== '') return;
+
+        const current = placeholderMessages[messageIndex];
+        let timeout: NodeJS.Timeout;
+
+        if (isDeleting) {
+            timeout = setTimeout(() => {
+                setDisplayText(prev => prev.slice(0, -1));
+                setCharIndex(i => i - 1);
+                if (charIndex <= 0) {
+                    setIsDeleting(false);
+                    setMessageIndex(i => (i + 1) % placeholderMessages.length);
+                }
+            }, 40);
+        } else {
+            timeout = setTimeout(() => {
+                setDisplayText(prev => prev + current.charAt(charIndex));
+                setCharIndex(i => i + 1);
+                if (charIndex >= current.length) {
+                    setTimeout(() => setIsDeleting(true), 1600);
+                }
+            }, 80);
+        }
+
+        return () => clearTimeout(timeout);
+    }, [charIndex, isDeleting, messageIndex, input]);
+
+    // Handle simple form submission - redirect to chat page with pre-filled input
+    const handleSend = () => {
+        if (!input.trim()) return;
+        
+        // Save the input to localStorage so chat page can pick it up
+        localStorage.setItem('savr-pre-fill-message', input);
+        navigate('/chat');
     };
 
     useEffect(() => {
@@ -264,54 +324,134 @@ const LandingPage: React.FC = () => {
             <div
                 id="intro"
                 ref={heroSectionRef}
-                className="relative bg-cover bg-center pt-32 pb-32 md:pt-48 md:pb-64 overflow-hidden bg-parallax"
+                className="relative bg-cover bg-center pt-32 pb-32 md:pt-48 md:pb-16 overflow-hidden bg-parallax"
                 style={{
                     backgroundImage: "url('/bg-1.jpg')",
                 }}
             >
                 <div className="container mx-auto px-4 max-w-5xl">
                     <div className="py-20">
+                        {/* Title and Description in single container */}
                         <div
                             ref={titleDivRef}
-                            className="glass-morph rounded-2xl p-12 mb-12 text-center shadow-2xl transition-all duration-700"
+                            className="glass-morph rounded-2xl p-12 mb-8 text-center shadow-2xl transition-all duration-700"
                             style={{
                                 transition: "transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.8s cubic-bezier(0.19, 1, 0.22, 1)"
                             }}
                         >
-                            <h1 className="text-white text-6xl font-serif mb-5">
-                                <span className="text-amber-500">Savr AI</span>
+                            <h1 className="text-white text-5xl font-serif mb-6">
+                                Your <span className="text-amber-500">AI-Powered</span> Private Chef
                             </h1>
-                            <p className="text-amber-100 text-2xl font-light">Your AI-Powered Private Chef</p>
-                        </div>
-                        <div
-                            ref={descriptionDivRef}
-                            className="glass-morph rounded-2xl p-10 mb-12 shadow-xl transition-all duration-700"
-                            style={{
-                                transition: "transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.8s cubic-bezier(0.19, 1, 0.22, 1)"
-                            }}
-                        >
-                            <p className="text-amber-100 leading-8 text-lg text-center">
-                                Savr plans your meals like a private chef would: listening to what you need,
-                                working with what you have, and personalizing for your goals and health.
-                            </p>
-                        </div>
-                        <div className="text-center animate-on-scroll scale-up">
-                            <div className="inline-block">
-                                <a
-                                    href="#features"
-                                    onClick={(e) => { e.preventDefault(); scrollToSection('features'); }}
-                                    className="flex justify-center items-center bg-amber-800 hover:bg-amber-700 py-5 px-8 rounded-full font-medium text-xl text-white transition-all duration-500 shadow-lg hover:shadow-xl hover:-translate-y-2"
-                                >
-                                    <ChefHat className="mr-3" />
-                                    <span>Let's explore...</span>
-                                </a>
+                            <div
+                                ref={descriptionDivRef}
+                                className="transition-all duration-700"
+                                style={{
+                                    transition: "transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.8s cubic-bezier(0.19, 1, 0.22, 1)"
+                                }}
+                            >
+                                <p className="text-amber-100 leading-8 text-lg">
+                                    Savr plans your meals like a private chef would: listening to what you need,
+                                    working with what you have, and personalizing for your goals and health.
+                                </p>
                             </div>
+                        </div>
+
+                        {/* Try Savr Input Bar - Now inside intro section */}
+                        <div className="glass-morph rounded-2xl p-8 mb-8 shadow-xl transition-all duration-700">
+                            <div className="text-center mb-6">
+                                <div className="flex justify-center mb-3">
+                                    <BotIcon className="w-12 h-12" />
+                                </div>
+                                <h3 className="text-xl font-serif text-amber-300 mb-2">Try Savr Assistant</h3>
+                                <p className="text-amber-100 text-sm">Ask me anything about what to eat, how to cook, or how to nourish your body.</p>
+                            </div>
+
+                            {/* Quick prompts */}
+                            <div className="flex justify-center gap-2 mb-4 flex-wrap">
+                                {[
+                                    "Dinner idea with steak",
+                                    "Low-calorie dessert", 
+                                    "Meal prep for 3 days",
+                                    "Best source of iron"
+                                ].map((text, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => setInput(text)}
+                                        className="px-3 py-1 rounded-full border border-amber-300 text-xs text-amber-200 hover:bg-amber-800 hover:bg-opacity-30 transition whitespace-nowrap"
+                                    >
+                                        {text}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Input bar */}
+                            <div className="max-w-xl mx-auto">
+                                <div className="flex items-center bg-white border border-stone-300 rounded-full px-4 py-3 shadow-lg relative">
+                                    {/* Upload icon */}
+                                    <button className="mr-2 text-stone-500 hover:text-amber-500 transition" title="Upload a file">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                            <path d="M12 16v-4M12 12V8M16 12h-8M4 12a8 8 0 1116 0 8 8 0 01-16 0z" />
+                                        </svg>
+                                    </button>
+
+                                    {/* Input field */}
+                                    <input
+                                        type="text"
+                                        value={input}
+                                        onChange={(e) => setInput(e.target.value)}
+                                        onKeyDown={(e) => {if(e.key === 'Enter') handleSend(); }}
+                                        placeholder=" "
+                                        className="flex-grow bg-transparent text-stone-700 text-lg px-2 py-1 focus:outline-none placeholder-transparent"
+                                    />
+                                    {input === '' && (
+                                        <div className="absolute left-12 text-stone-400 text-lg pointer-events-none">
+                                            {displayText}<span className="animate-pulse">|</span>
+                                        </div>
+                                    )}
+
+                                    {/* Voice icon */}
+                                    <button className="ml-2 text-stone-500 hover:text-amber-500 transition" title="Record voice">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                            <path d="M12 1a4 4 0 0 1 4 4v7a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z" />
+                                            <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                                            <line x1="12" y1="19" x2="12" y2="23" />
+                                            <line x1="8" y1="23" x2="16" y2="23" />
+                                        </svg>
+                                    </button>
+
+                                    {/* Send button - Improved design */}
+                                    <button 
+                                        onClick={handleSend} 
+                                        className="ml-3 bg-amber-500 hover:bg-amber-600 text-white p-3 rounded-full transition-all duration-200 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg" 
+                                        title="Send message"
+                                    >
+                                        <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                
+                                {/* Optional: Login prompt if not logged in */}
+                                {!user && (
+                                    <div className="text-center mt-3">
+                                        <p className="text-amber-200 text-xs mb-2">Want to save your conversations?</p>
+                                        <GoogleLoginButton />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Let's Explore Button */}
+                        <div className="text-center">
+                            <button
+                                onClick={() => scrollToSection('features')}
+                                className="glass-morph hover:bg-amber-800 hover:bg-opacity-30 text-amber-100 hover:text-white font-medium text-lg px-8 py-4 rounded-full shadow-lg transition-all duration-500 hover:shadow-xl hover:-translate-y-2"
+                            >
+                                Let's Explore
+                            </button>
                         </div>
                     </div>
                 </div>
-
-                {/* Scroll indicator */}
-                <div className="scroll-indicator"></div>
             </div>
 
             {/* Features Section */}
