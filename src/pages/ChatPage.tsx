@@ -229,13 +229,6 @@ const ChatPage: React.FC = () => {
         <div className="flex justify-between items-center w-full max-w-4xl mx-auto">
           <h1 className="text-xl font-serif text-amber-600">Savr Chat Assistant</h1>
           <div className="flex items-center space-x-4">
-            {user ? (
-              <span className="text-sm text-stone-500">
-                Welcome, {user.name?.split(' ')[0] || 'User'}!
-              </span>
-            ) : (
-              <GoogleLoginButton />
-            )}
             <button
               onClick={clearConversation}
               className="px-3 py-1 text-sm font-medium rounded-md bg-amber-100 text-amber-700 hover:bg-amber-200 transition cursor-pointer"
