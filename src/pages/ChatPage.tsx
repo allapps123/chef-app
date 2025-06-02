@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { MenuIcon } from 'lucide-react';
+import { Logo } from '../components/common/Logo';
 import GoogleLoginButton from '../components/common/Login';
 import { signOut, auth } from '../lib/firebase';
 import { getAIResponse } from '../services/aiService';
@@ -45,6 +47,15 @@ const ChatPage: React.FC = () => {
     const savedUser = localStorage.getItem('savr-user');
     if (savedUser) {
       setUser(JSON.parse(savedUser));
+    }
+  }, []);
+
+  // Check for pre-filled message from landing page
+  useEffect(() => {
+    const preFilledMessage = localStorage.getItem('savr-pre-fill-message');
+    if (preFilledMessage) {
+      setInput(preFilledMessage);
+      localStorage.removeItem('savr-pre-fill-message'); // Clean up after use
     }
   }, []);
 
@@ -152,18 +163,76 @@ const ChatPage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-stone-100 text-stone-800">
-      {/* Header */}
-      <header className="bg-white shadow-sm px-6 py-4 flex justify-center">
+      {/* Navbar */}
+      <nav className="fixed w-full bg-stone-900 bg-opacity-90 shadow-lg backdrop-blur-md py-3 z-50">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center">
+            <div className="text-stone-700 font-bold text-2xl transform scale-90">
+              <Logo onClick={() => navigate('/')} />
+            </div>
+            <ul className="hidden md:flex space-x-8 text-lg font-medium">
+              {[
+                { id: 'intro', label: 'Intro', path: '/#intro' },
+                { id: 'features', label: 'Features', path: '/#features' },
+                { id: 'about', label: 'About', path: '/#about' },
+                { id: 'contact', label: 'Contact', path: '/#contact' },
+                { id: 'chat', label: 'Chat', path: '/chat', active: true }
+              ].map(({ id, label, path, active }) => (
+                <li key={id}>
+                  <a
+                    href={path}
+                    onClick={(e) => {
+                      if (path.startsWith('/#')) {
+                        e.preventDefault();
+                        navigate('/');
+                        // Small delay to ensure navigation completes before scrolling
+                        setTimeout(() => {
+                          const section = document.getElementById(id);
+                          if (section) {
+                            section.scrollIntoView({ behavior: 'smooth' });
+                          }
+                        }, 100);
+                      }
+                    }}
+                    className={`nav-link transition-all duration-300 py-2 px-3 rounded-md ${
+                      active ? 'active text-amber-500' : 'text-amber-700 hover:text-amber-500'
+                    }`}
+                  >
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            {user ? (
+              <button
+                onClick={handleLogout}
+                className="hidden md:block bg-amber-600 hover:bg-amber-500 text-white font-medium px-5 py-2 rounded-full shadow transition-all text-sm"
+              >
+                Logout
+              </button>
+            ) : (
+              <div className="hidden md:block">
+                <GoogleLoginButton />
+              </div>
+            )}
+            <div className="md:hidden">
+              <button className="text-amber-700 hover:text-amber-500">
+                <MenuIcon />
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Header - Updated to account for navbar */}
+      <header className="bg-white shadow-sm px-6 py-4 flex justify-center mt-16">
         <div className="flex justify-between items-center w-full max-w-4xl mx-auto">
           <h1 className="text-xl font-serif text-amber-600">Savr Chat Assistant</h1>
           <div className="flex items-center space-x-4">
             {user ? (
-              <button
-                onClick={handleLogout}
-                className="text-sm text-stone-500 hover:text-red-500 transition"
-              >
-                Logout
-              </button>
+              <span className="text-sm text-stone-500">
+                Welcome, {user.name?.split(' ')[0] || 'User'}!
+              </span>
             ) : (
               <GoogleLoginButton />
             )}
