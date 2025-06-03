@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { MenuIcon } from 'lucide-react';
 import { Logo } from '../components/common/Logo';
 import GoogleLoginButton from '../components/common/Login';
+import UserAvatar from '../components/common/UserAvatar';
 import { signOut, auth } from '../lib/firebase';
 import { getAIResponse } from '../services/aiService';
 import Markdown from 'react-markdown';
@@ -208,12 +209,15 @@ const ChatPage: React.FC = () => {
 
                     {/* Desktop Auth */}
                     {user ? (
-                        <button
-                            onClick={handleLogout}
-                            className="hidden lg:block bg-amber-600 hover:bg-amber-500 text-white font-medium px-3 lg:px-4 py-1.5 lg:py-2 rounded-full shadow transition-all text-xs lg:text-sm"
-                        >
-                            Logout
-                        </button>
+                        <div className="hidden lg:flex items-center space-x-3">
+                            <UserAvatar user={user} size="sm" />
+                            <button
+                                onClick={handleLogout}
+                                className="bg-amber-600 hover:bg-amber-500 text-white font-medium px-3 lg:px-4 py-1.5 lg:py-2 rounded-full shadow transition-all text-xs lg:text-sm"
+                            >
+                                Logout
+                            </button>
+                        </div>
                     ) : (
                         <div className="hidden lg:block">
                             <GoogleLoginButton />
@@ -221,7 +225,8 @@ const ChatPage: React.FC = () => {
                     )}
 
                     {/* Mobile Menu Button */}
-                    <div className="lg:hidden">
+                    <div className="lg:hidden flex items-center space-x-2">
+                        {user && <UserAvatar user={user} size="sm" />}
                         <button 
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                             className="text-amber-700 hover:text-amber-500 p-2"
@@ -240,7 +245,8 @@ const ChatPage: React.FC = () => {
                                 { id: 'features', label: 'Features', path: '/#features' },
                                 { id: 'about', label: 'About', path: '/#about' },
                                 { id: 'contact', label: 'Contact', path: '/#contact' },
-                                { id: 'chat', label: 'Chat', path: '/chat', active: true }
+                                { id: 'chat', label: 'Chat', path: '/chat', active: true },
+                                { id: 'profile', label: 'Profile', path: '/profile' }
                             ].map(({ id, label, path, active }) => (
                                 <li key={id}>
                                     <a

@@ -8,6 +8,7 @@ import ChatFrame from '../components/common/ChatFrame';
 import GoogleLoginButton from '../components/common/Login';
 import { signOut, auth } from '../lib/firebase';
 import { useNavigate } from 'react-router-dom';
+import UserAvatar from '../components/common/UserAvatar';
 
 interface Message {
   id: string;
@@ -300,12 +301,15 @@ const LandingPage: React.FC = () => {
 
                         {/* Desktop Auth */}
                         {user ? (
-                        <button
-                            onClick={handleLogout}
-                            className="hidden lg:block bg-amber-600 hover:bg-amber-500 text-white font-medium px-3 lg:px-5 py-1.5 lg:py-2 rounded-full shadow transition-all text-xs lg:text-sm"
-                        >
-                            Logout
-                        </button>
+                        <div className="hidden lg:flex items-center space-x-3">
+                            <UserAvatar user={user} size="sm" />
+                            <button
+                                onClick={handleLogout}
+                                className="bg-amber-600 hover:bg-amber-500 text-white font-medium px-3 lg:px-5 py-1.5 lg:py-2 rounded-full shadow transition-all text-xs lg:text-sm"
+                            >
+                                Logout
+                            </button>
+                        </div>
                         ) : (
                         <div className="hidden lg:block">
                             <GoogleLoginButton />
@@ -313,7 +317,8 @@ const LandingPage: React.FC = () => {
                         )}
 
                         {/* Mobile Menu Button */}
-                        <div className="lg:hidden">
+                        <div className="lg:hidden flex items-center space-x-2">
+                            {user && <UserAvatar user={user} size="sm" />}
                             <button 
                                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                                 className="text-amber-700 hover:text-amber-500 p-2"
@@ -332,11 +337,12 @@ const LandingPage: React.FC = () => {
                                 { id: 'features', label: 'Features' },
                                 { id: 'about', label: 'About' },
                                 { id: 'contact', label: 'Contact' },
-                                { id: 'chat', label: 'Chat', isRoute: true }
-                                ].map(({ id, label, isRoute }) => (
+                                { id: 'chat', label: 'Chat', isRoute: true },
+                                { id: 'profile', label: 'Profile', isRoute: true, showOnlyIfLoggedIn: true }
+                                ].filter(item => !item.showOnlyIfLoggedIn || user).map(({ id, label, isRoute }) => (
                                 <li key={id}>
                                     <a
-                                    href={isRoute ? '/chat' : `#${id}`}
+                                    href={isRoute ? `/${id}` : `#${id}`}
                                     onClick={(e) => {
                                         setIsMobileMenuOpen(false);
                                         if (!isRoute) {

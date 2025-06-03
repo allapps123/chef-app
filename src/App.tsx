@@ -2,6 +2,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import LandingPage from './pages/LandingPage';
 import ChatPage from './pages/ChatPage';
+import UserProfilePage from './pages/UserProfilePage';
 import './App.css';
 
 function App() {
@@ -33,6 +34,19 @@ function App() {
               transition={{ duration: 0.4, ease: 'easeOut' }}
             >
               <ChatPage />
+            </motion.div>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -20, opacity: 0 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+            >
+              <UserProfilePage />
             </motion.div>
           }
         />
