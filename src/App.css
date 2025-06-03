@@ -121,3 +121,8 @@
 .nav-link:hover:after {
   width: 75%;
 }
+
+/* Placeholder transition effect */
+input::placeholder {
+  transition: opactity 0.4s ease-in-out;
+}

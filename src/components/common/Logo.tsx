@@ -4,9 +4,10 @@ interface LogoProps {
   showText?: boolean;
   color?: string;
   className?: string;
+  onClick?: () => void;
 }
 
-export function Logo({ size = 'md', showText = true, color = 'text-amber-500', className = '' }: LogoProps) {
+export function Logo({ size = 'md', showText = true, color = 'text-amber-500', className = '', onClick = () => {} }: LogoProps) {
   // Size classes mapping
   const sizeClasses = {
     sm: 'h-3 w-5',
@@ -21,7 +22,7 @@ export function Logo({ size = 'md', showText = true, color = 'text-amber-500', c
   };
 
   return (
-    <div className={`flex items-center gap-2 ${className}`}>
+    <button onClick={onClick} className={`flex items-center gap-2 cursor-pointer ${className}`}>
       <div className="relative">
         <img
           src="./logo.svg"
@@ -34,6 +35,6 @@ export function Logo({ size = 'md', showText = true, color = 'text-amber-500', c
           Savr AI
         </span>
       )}
-    </div>
+    </button>
   );
 }
