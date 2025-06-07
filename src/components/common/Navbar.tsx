@@ -44,7 +44,6 @@ const Navbar: React.FC = () => {
               { id: "about", label: "About", path: "/#about" },
               { id: "contact", label: "Contact", path: "/#contact" },
               { id: "chat", label: "Chat", path: "/chat", active: true },
-              { id: "profile", label: "Profile", path: "/profile" },
               { id: "forum", label: "Forum", path: "/forum", active: true },
             ].map(({ id, label, path }) => (
               <li key={id}>
@@ -113,7 +112,6 @@ const Navbar: React.FC = () => {
                 { id: "about", label: "About", path: "/#about" },
                 { id: "contact", label: "Contact", path: "/#contact" },
                 { id: "chat", label: "Chat", path: "/chat", active: true },
-                { id: "profile", label: "Profile", path: "/profile" },
                 { id: "forum", label: "Forum", path: "/forum", active: true },
               ].map(({ id, label, path }) => (
                 <li key={id}>
