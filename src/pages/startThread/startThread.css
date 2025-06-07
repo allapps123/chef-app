@@ -1,0 +1,97 @@
+body, .App, .min-h-screen {
+    background: #f7f6f3 !important;
+  }
+  
+  .start-thread-container {
+    max-width: 360px;
+    margin: 64px auto 0 auto;
+    padding: 32px 20px 32px 20px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 18px;
+    box-shadow: 0 6px 32px 0 rgba(80, 60, 20, 0.08), 0 1.5px 6px 0 rgba(0,0,0,0.03);
+    position: relative;
+  }
+  
+  .start-thread-container::before {
+    display: none;
+  }
+  
+  .start-thread-container h1 {
+    font-size: 2rem;
+    margin-bottom: 32px;
+    text-align: center;
+    font-weight: 700;
+    color: #222;
+    letter-spacing: -1px;
+  }
+  
+  .thread-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  
+  .thread-form label {
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #444;
+    gap: 6px;
+  }
+  
+  .thread-form select,
+  .thread-form input,
+  .thread-form textarea {
+    margin-top: 0;
+    padding: 12px 14px;
+    font-size: 1rem;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    outline: none;
+    background: #fafaf9;
+    transition: border 0.2s;
+  }
+  
+  .thread-form select:focus,
+  .thread-form input:focus,
+  .thread-form textarea:focus {
+    border-color: #222;
+    background: #fffbe9;
+  }
+  
+  .thread-form textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+  
+  .thread-form button {
+    align-self: flex-end;
+    padding: 12px 32px;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.08);
+    transition: background 0.2s, color 0.2s, transform 0.1s;
+  }
+  
+  .thread-form button:hover {
+    background: #333;
+    color: #fff;
+    transform: translateY(-2px) scale(1.03);
+  }
+  
+  @media (max-width: 900px) {
+    .start-thread-container {
+      max-width: 80vw;
+      min-width: 340px;
+      width: 40vw;
+      padding: 24px 4vw 24px 4vw;
+    }
+  }
+    

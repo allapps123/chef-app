@@ -1,10 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MenuIcon } from 'lucide-react';
-import { Logo } from '../components/common/Logo';
-import GoogleLoginButton from '../components/common/Login';
-import UserAvatar from '../components/common/UserAvatar';
-import { signOut, auth } from '../lib/firebase';
 import { getAIResponse } from '../services/aiService';
 import Markdown from 'react-markdown';
 
@@ -23,8 +18,6 @@ const placeholderMessages = [
 ];
 
 const ChatPage: React.FC = () => {
-  const [user, setUser] = useState<any>(null);
-  const navigate = useNavigate();
   const [displayText, setDisplayText] = useState('');
   const [messageIndex, setMessageIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -33,7 +26,6 @@ const ChatPage: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Automatically scroll down
   const scrollToBottom = () => {
@@ -44,14 +36,6 @@ const ChatPage: React.FC = () => {
     scrollToBottom();
   }, [messages, loading]);
 
-  // Check if user is logged in
-  useEffect(() => {
-    const savedUser = localStorage.getItem('savr-user');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-  }, []);
-
   // Check for pre-filled message from landing page
   useEffect(() => {
     const preFilledMessage = localStorage.getItem('savr-pre-fill-message');
@@ -60,14 +44,6 @@ const ChatPage: React.FC = () => {
       localStorage.removeItem('savr-pre-fill-message'); // Clean up after use
     }
   }, []);
-
-  // Logout handler
-  const handleLogout = async () => {
-    await signOut(auth);
-    localStorage.removeItem('savr-user');
-    setUser(null);
-    navigate('/');
-  };
 
   // Typewriter effect for animated placeholder
   useEffect(() => {
@@ -166,136 +142,7 @@ const ChatPage: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-stone-100 text-stone-800">
         {/* Navbar - Mobile Responsive */}
-        <nav className="fixed w-full bg-stone-900 bg-opacity-90 shadow-lg backdrop-blur-md py-2 sm:py-3 z-50">
-            <div className="container mx-auto px-3 sm:px-4">
-                <div className="flex justify-between items-center">
-                    <div className="text-stone-700 font-bold text-lg sm:text-xl md:text-2xl transform scale-90">
-                        <Logo onClick={() => navigate('/')} size="sm" />
-                    </div>
-                    
-                    {/* Desktop Navigation */}
-                    <ul className="hidden lg:flex space-x-4 xl:space-x-8 text-sm xl:text-lg font-medium">
-                        {[
-                            { id: 'intro', label: 'Intro', path: '/#intro' },
-                            { id: 'features', label: 'Features', path: '/#features' },
-                            { id: 'about', label: 'About', path: '/#about' },
-                            { id: 'contact', label: 'Contact', path: '/#contact' },
-                            { id: 'chat', label: 'Chat', path: '/chat', active: true }
-                        ].map(({ id, label, path, active }) => (
-                            <li key={id}>
-                                <a
-                                    href={path}
-                                    onClick={(e) => {
-                                        if (path.startsWith('/#')) {
-                                            e.preventDefault();
-                                            navigate('/');
-                                            setTimeout(() => {
-                                                const section = document.getElementById(id);
-                                                if (section) {
-                                                    section.scrollIntoView({ behavior: 'smooth' });
-                                                }
-                                            }, 100);
-                                        }
-                                    }}
-                                    className={`nav-link transition-all duration-300 py-2 px-3 rounded-md ${
-                                        active ? 'active text-amber-500' : 'text-amber-700 hover:text-amber-500'
-                                    }`}
-                                >
-                                    {label}
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
-
-                    {/* Desktop Auth */}
-                    {user ? (
-                        <div className="hidden lg:flex items-center space-x-3">
-                            <UserAvatar user={user} size="sm" />
-                            <button
-                                onClick={handleLogout}
-                                className="bg-amber-600 hover:bg-amber-500 text-white font-medium px-3 lg:px-4 py-1.5 lg:py-2 rounded-full shadow transition-all text-xs lg:text-sm"
-                            >
-                                Logout
-                            </button>
-                        </div>
-                    ) : (
-                        <div className="hidden lg:block">
-                            <GoogleLoginButton />
-                        </div>
-                    )}
-
-                    {/* Mobile Menu Button */}
-                    <div className="lg:hidden flex items-center space-x-2">
-                        {user && <UserAvatar user={user} size="sm" />}
-                        <button 
-                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="text-amber-700 hover:text-amber-500 p-2"
-                        >
-                            <MenuIcon size={18} />
-                        </button>
-                    </div>
-                </div>
-
-                {/* Mobile Menu */}
-                {isMobileMenuOpen && (
-                    <div className="lg:hidden mt-3 pb-3 border-t border-stone-700">
-                        <ul className="space-y-2 pt-3">
-                            {[
-                                { id: 'intro', label: 'Intro', path: '/#intro' },
-                                { id: 'features', label: 'Features', path: '/#features' },
-                                { id: 'about', label: 'About', path: '/#about' },
-                                { id: 'contact', label: 'Contact', path: '/#contact' },
-                                { id: 'chat', label: 'Chat', path: '/chat', active: true },
-                                { id: 'profile', label: 'Profile', path: '/profile' }
-                            ].map(({ id, label, path, active }) => (
-                                <li key={id}>
-                                    <a
-                                        href={path}
-                                        onClick={(e) => {
-                                            setIsMobileMenuOpen(false);
-                                            if (path.startsWith('/#')) {
-                                                e.preventDefault();
-                                                navigate('/');
-                                                setTimeout(() => {
-                                                    const section = document.getElementById(id);
-                                                    if (section) {
-                                                        section.scrollIntoView({ behavior: 'smooth' });
-                                                    }
-                                                }, 100);
-                                            }
-                                        }}
-                                        className={`block py-2 px-3 text-sm font-medium rounded-md transition-all duration-300 ${
-                                            active ? 'text-amber-500 bg-amber-900 bg-opacity-20' : 'text-amber-700 hover:text-amber-500 hover:bg-amber-900 hover:bg-opacity-10'
-                                        }`}
-                                    >
-                                        {label}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                        
-                        {/* Mobile Auth */}
-                        <div className="pt-3 border-t border-stone-700 mt-3">
-                            {user ? (
-                                <button
-                                    onClick={() => {
-                                        handleLogout();
-                                        setIsMobileMenuOpen(false);
-                                    }}
-                                    className="w-full bg-amber-600 hover:bg-amber-500 text-white font-medium px-4 py-2 rounded-full shadow transition-all text-sm"
-                                >
-                                    Logout
-                                </button>
-                            ) : (
-                                <div className="w-full">
-                                    <GoogleLoginButton />
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                )}
-            </div>
-        </nav>
+        
 
         {/* Header - Mobile Responsive */}
         <header className="bg-white shadow-sm px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 flex justify-center mt-12 sm:mt-14 md:mt-16">

@@ -1,3 +1,4 @@
+import logo from '../../../public/logo.svg';
 
 interface LogoProps {
   size?: 'sm' | 'md' | 'lg';
@@ -25,7 +26,7 @@ export function Logo({ size = 'md', showText = true, color = 'text-amber-500', c
     <button onClick={onClick} className={`flex items-center gap-2 cursor-pointer ${className}`}>
       <div className="relative">
         <img
-          src="./logo.svg"
+          src={logo}
           alt="Savr AI Logo"
           className={`${sizeClasses[size]}`}
         />

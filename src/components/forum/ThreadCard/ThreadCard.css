@@ -1,0 +1,48 @@
+.thread-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+  }
+  
+  .thread-card:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .thread-header {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #777;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .author-avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+  }
+  
+  .thread-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 10px;
+    color: #222;
+  }
+  
+  .thread-preview {
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 12px;
+  }
+  
+  .thread-footer {
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+    color: #888;
+  }
+  

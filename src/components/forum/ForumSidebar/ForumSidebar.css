@@ -1,0 +1,43 @@
+.sidebar {
+    width: 240px;
+    background: #fff;
+    padding: 20px;
+    border-right: 1px solid #e0e0e0;
+    height: auto;
+    align-self: flex-start;
+    box-sizing: border-box;
+  }
+  
+  .sidebar h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: #333;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar li {
+    padding: 10px;
+    margin-bottom: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.2s ease-in-out;
+  }
+  
+  .sidebar li:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .sidebar li.selected {
+    background-color: #f8f9fa;
+    font-weight: bold;
+  }
+  
+  .forum-name {
+    margin-left: 4px;
+  }
+  
