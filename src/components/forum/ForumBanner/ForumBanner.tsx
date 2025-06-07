@@ -2,6 +2,7 @@
 import React from "react";
 import "./ForumBanner.css";
 import { useNavigate } from "react-router-dom";
+import { auth } from "../../../lib/firebase";
 
 interface ForumBannerProps {
   forum: {
@@ -16,6 +17,11 @@ const ForumBanner: React.FC<ForumBannerProps> = ({ forum }) => {
   if (!forum) return null;
 
   const handleStartThread = () => {
+    const user = auth.currentUser;
+    if (!user) {
+      alert("Please sign in to start a thread.");
+      return;
+    }
     navigate("/forum/start-thread");
   };
 

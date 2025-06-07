@@ -30,14 +30,14 @@ const StartThreadPage: React.FC = () => {
   const [body, setBody] = useState("");
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        navigate("/sign-in");
-      }
-    });
-    return () => unsubscribe();
-  }, [navigate]);
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     if (!user) {
+  //       // navigate("/sign-in");
+  //     }
+  //   });
+  //   return () => unsubscribe();
+  // }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,7 +46,8 @@ const StartThreadPage: React.FC = () => {
     const user = auth.currentUser;
     if (!user) {
       alert("Please sign in.");
-      navigate("/sign-in");
+      // navigate("/sign-in");
+      setLoading(false);
       return;
     }
 
