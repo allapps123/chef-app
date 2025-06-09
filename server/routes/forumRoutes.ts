@@ -1,5 +1,5 @@
 import express from "express";
-import { pool } from "../db/forums/index.js";
+import { pool } from "../db/index.js";
 import { verifyFirebaseToken } from "../middleware/authMiddleware.js";
 
 const router = express.Router();

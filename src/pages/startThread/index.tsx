@@ -1,9 +1,8 @@
 // File: src/pages/StartThreadPage.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { auth } from "../../lib/firebase";
-import { onAuthStateChanged } from "firebase/auth";
 import "./startThread.css";
 
 interface Category {
@@ -63,7 +62,7 @@ const StartThreadPage: React.FC = () => {
       const token = await user.getIdToken();
 
       await axios.post(
-        `${VITE_DEV_URL}/forum/threads`,
+        `/.netlify/functions/server/forum/threads`,
         {
           category_id: parseInt(selectedForum),
           user_id: userId,

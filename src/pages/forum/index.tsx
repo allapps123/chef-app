@@ -78,7 +78,7 @@ const Forum: React.FC = () => {
         token = await firebaseUser.getIdToken();
       }
       try {
-        const res = await axios.get(`${VITE_DEV_URL}/forum/threads`, {
+        const res = await axios.get(`/.netlify/functions/server/forum/threads`, {
           params: { user_id },
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });

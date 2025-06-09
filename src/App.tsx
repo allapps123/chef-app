@@ -11,6 +11,7 @@ import Footer from "./components/common/Footer";
 import Navbar from "./components/common/Navbar";
 import { useEffect, useState } from "react";
 import GlobalLoading from "./components/GlobalLoading";
+import PersonalizationSurvey from "./pages/food-survey/Personalization";
 
 function App() {
   const location = useLocation();
@@ -66,6 +67,7 @@ function App() {
                       path="/forum/start-thread"
                       element={<StartThreadPage />}
                     />
+                    <Route path="/food-survey" element={<PersonalizationSurvey onSubmit={() => {}} />} />
                   </Routes>
                 </motion.div>
               }

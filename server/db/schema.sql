@@ -60,3 +60,20 @@ CREATE TABLE likes (
   UNIQUE(thread_id, user_id),
   UNIQUE(reply_id, user_id)
 );
+
+CREATE TABLE user_preferences (
+  id SERIAL PRIMARY KEY,
+  user_id VARCHAR(255) UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+  diet_type TEXT[],             -- array of selected dietary options
+  other_diet TEXT,
+  allergies TEXT[],             -- array of selected allergy options
+  other_allergy TEXT,
+  disliked_ingredients TEXT,    -- free text input only
+  goal TEXT[],                  -- array of selected goals
+  other_goal TEXT,
+  preferred_cuisines TEXT[],    -- array of selected cuisines
+  other_cuisine TEXT,
+  status TEXT NOT NULL CHECK (status IN ('active', 'inactive')),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);

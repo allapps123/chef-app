@@ -6,6 +6,7 @@ import cors from "cors";
 import forumRouter from "../routes/forumRoutes.js";
 import serverless from "serverless-http";
 import bodyParser from "body-parser";
+import userPreferenceRouter from "../routes/userPreference.js";
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use((req, res, next) => {
   });
 
 router.use("/forum", forumRouter);
+router.use("/user-preference", userPreferenceRouter);
 
 // This is important for Netlify Functions
 app.use("/.netlify/functions/server", router);

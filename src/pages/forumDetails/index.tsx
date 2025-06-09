@@ -62,7 +62,7 @@ const ForumDetails: React.FC = () => {
       }
 
       try {
-        const res = await axios.get(`${VITE_DEV_URL}/forum/threads/${id}`, {
+        const res = await axios.get(`/.netlify/functions/server/forum/threads/${id}`, {
           params: { user_id },
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
@@ -120,7 +120,7 @@ const ForumDetails: React.FC = () => {
     try {
       const token = await auth.currentUser.getIdToken();
       const res = await axios.put(
-        `${VITE_DEV_URL}/forum/threads/${thread.id}/like`,
+        `/.netlify/functions/server/forum/threads/${thread.id}/like`,
         {
           user_id: auth.currentUser.uid,
           user_name: auth.currentUser.displayName,
@@ -160,7 +160,7 @@ const ForumDetails: React.FC = () => {
     try {
       const token = await auth.currentUser.getIdToken();
       const res = await axios.put(
-        `${VITE_DEV_URL}/forum/replies/${commentId}/like`,
+        `/.netlify/functions/server/forum/replies/${commentId}/like`,
         {
           user_id: auth.currentUser.uid,
           user_name: auth.currentUser.displayName,
@@ -206,7 +206,7 @@ const ForumDetails: React.FC = () => {
       const email = user.email || "anonymous@email.com";
       const username = user.displayName || email.split("@")[0];
       const res = await axios.post(
-        `${VITE_DEV_URL}/forum/threads/${thread.id}/replies`,
+        `/.netlify/functions/server/forum/threads/${thread.id}/replies`,
         {
           user_id: user.uid,
           content: newComment,

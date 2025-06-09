@@ -68,7 +68,7 @@ const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
       });
 
       const res = await axios.put(
-        `${VITE_DEV_URL}/forum/threads/${thread.id}/like`,
+        `/.netlify/functions/server/forum/threads/${thread.id}/like`,
         {
           user_id: user.uid,
           user_name: user.displayName,
